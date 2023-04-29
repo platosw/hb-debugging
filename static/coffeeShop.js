@@ -6,27 +6,16 @@ let orderTotal = 0;
 const addButtons = document.querySelectorAll(".add-to-order");
 for (const button of addButtons) {
     button.addEventListener("click", () => {
-        const item = { id: button.id };
+        const item = button.id;
         // /update-cart.json?item=${item}
-        fetch(`/update-cart.json`, {
-            method: "POST",
-            body: JSON.stringify(item),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+        fetch(`/update-cart.json?id=${item}`)
             .then((response) => response.json())
             .then((result) => {
-                console.log("Result from fetch:", result);
-
                 cart = result.cart;
                 orderTotal = result.total;
+                displayCart(cart);
+                displayOrderTotal(orderTotal);
             });
-        console.log("cart:", cart);
-        console.log("orderTotal:", orderTotal);
-
-        displayCart(cart);
-        displayOrderTotal(orderTotal);
     });
 }
 

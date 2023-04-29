@@ -30,20 +30,21 @@ def homepage():
     )
 
 
-@app.route("/update-cart.json", methods=["POST"])
+@app.route("/update-cart.json")
 def update_cart():
     """Add a new item to the cart.
 
     Return updated cart as JSON.
     """
 
-    item = request.json.get("id")
+    item = request.args.get("id")
     
-    # session["cart"][item] += 1
-    session["cart"].get(item, 1) + 1
-    session["order_total"] += get_item_price(item)
+    if session["cart"].get(item) == None:
+        session["cart"][item] = 1
+    else:
+        session["cart"][item] += 1
 
-        
+    session["order_total"] += get_item_price(item)
 
     return jsonify({"cart": session["cart"], "total": session["order_total"]})
 
